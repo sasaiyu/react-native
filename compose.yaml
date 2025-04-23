@@ -1,0 +1,15 @@
+version: '3'
+services:
+  myapp:
+    container_name: myapp
+    tty: true
+    build:
+      context: .
+      dockerfile: ./.devcontainer/myapp/Dockerfile
+    volumes:
+      - ./:/workspace
+      - reactnative-node_modules:/workspace/myapp/node_modules
+    ports:
+      - 8081:8081
+volumes:
+  reactnative-node_modules:

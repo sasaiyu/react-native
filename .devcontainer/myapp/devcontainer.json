@@ -1,0 +1,58 @@
+{
+  "name": "myapp",
+  "dockerComposeFile": "../../compose.yaml",
+  "service": "myapp",
+  "workspaceFolder": "/workspace/myapp",
+  "init": true,
+  "features": {
+    "ghcr.io/devcontainers-contrib/features/jest": {
+      "version": "latest"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.formatOnPaste": true,
+        "editor.formatOnType": true,
+        "files.insertFinalNewline": true,
+        "files.trimTrailingWhitespace": true,
+        "files.autoSave": "afterDelay",
+        "prettier.jsxSingleQuote": true,
+        "prettier.singleQuote": true,
+        "prettier.endOfLine": "auto",
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit"
+        },
+        "eslint.useESLintClass": true,
+        "git.suggestSmartCommit": false,
+        "git.confirmSync": false,
+        "git.openRepositoryInParentFolders": "always",
+        "[javascript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "remote.autoForwardPortsSource": "hybrid"
+      },
+      "extensions": [
+        "VisualStudioExptTeam.vscodeintellicode",
+        "mhutchie.git-graph",
+        "streetsidesoftware.code-spell-checker",
+        "esbenp.prettier-vscode",
+        "mosapride.zenkaku",
+        "msjsdiag.vscode-react-native",
+        "dsznajder.es7-react-js-snippets",
+        "dbaeumer.vscode-eslint",
+        "Orta.vscode-jest",
+        "christian-kohler.path-intellisense",
+        "wix.vscode-import-cost",
+        "kisstkondoros.vscode-gutter-preview",
+        "bradlc.vscode-tailwindcss",
+        "alfredbirk.tailwind-documentation"
+      ]
+    }
+  },
+  "remoteUser": "node",
+  "postCreateCommand": "sudo chown node node_modules",
+  "postAttachCommand": "git config --global --add safe.directory /workspaces"
+}
