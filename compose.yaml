@@ -11,5 +11,9 @@ services:
       - reactnative-node_modules:/workspace/myapp/node_modules
     ports:
       - 8081:8081
+      - 19000:19000
+      - 19001:19001
+      - 19002:19002
+    env_file: .devcontainer/myapp/.env
 volumes:
   reactnative-node_modules:
