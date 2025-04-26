@@ -15,5 +15,10 @@ services:
       - 19001:19001
       - 19002:19002
     env_file: .devcontainer/myapp/.env
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    environment:
+      - ANDROID_ADB_SERVER_ADDRESS=172.17.176.1
+      - ANDROID_ADB_SERVER_PORT=5037
 volumes:
   reactnative-node_modules:

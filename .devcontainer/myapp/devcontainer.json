@@ -54,5 +54,5 @@
   },
   "remoteUser": "node",
   "postCreateCommand": "sudo chown node node_modules",
-  "postAttachCommand": "git config --global --add safe.directory /workspaces"
+  "postAttachCommand": "git config --global --add safe.directory /workspaces && bash scripts/socat.sh"
 }
