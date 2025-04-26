@@ -19,3 +19,8 @@ React Native の開発環境をコンテナで構築する。
 DevContainer にインストールさせるパッケージ
 
 - [Jest](https://github.com/devcontainers-extra/features/tree/main/src/jest)
+
+
+## [NativeWind](https://www.nativewind.dev/)
+
+React Native のためにTailwind CSSのスタイリング手法を利用できるライブラリ。Webとモバイルアプリの開発でスタイリングを統一できる。
