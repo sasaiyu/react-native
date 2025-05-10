@@ -2,6 +2,14 @@
   "expo": {
     "web": {
       "bundler": "metro"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "36c6db31-e8fa-4638-a707-7c5572cedf60"
+      }
+    },
+    "android": {
+      "package": "com.sasaiyu.myexpoproject"
     }
   }
 }
