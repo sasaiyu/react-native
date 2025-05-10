@@ -1,33 +1,30 @@
-# プロジェクトの起動
+# プロジェクトについて
 
-## 事前設定
+## 構成
+
+### [React Native](https://reactnative.dev/)
+
+React Native サーバでは [~/Android/platform-tools/adb](https://www.midorimici.com/posts/react-native-wsl) を利用するため、`sdkmanager`をインストールする必要がある。
+
+### [NativeWind](https://www.nativewind.dev/)
+
+React Native のために Tailwind CSS のスタイリング手法を利用できるライブラリ。Web とモバイルアプリの開発でスタイリングを統一できる。
+
+## 起動方法
+
+### 事前設定
 
 Windows で起動した emulator と通信をするため、 WSL2 経由でコンテナからのポートフォワードと FW の解除設定を行う。
 
 ```powershell
 # WSL2からのルーティング設定
 netsh interface portproxy add v4tov4 listenport=5554 listenaddress=0.0.0.0 connectport=5554 connectaddress=127.0.0.1
+
 # Expoからのルーティング設定。WSL2へポートフォワード
 netsh interface portproxy add v4tov4 listenport=8081 listenaddress=0.0.0.0 connectport=8081 connectaddress=172.17.189.56
-netsh interface portproxy add v4tov4 listenport=19000 listenaddress=0.0.0.0　connectport=19000 connectaddress=172.17.189.56
-netsh interface portproxy add v4tov4 listenport=19001 listenaddress=0.0.0.0　connectport=19001 connectaddress=172.17.189.56
-netsh interface portproxy add v4tov4 listenport=19002 listenaddress=0.0.0.0　connectport=19002 connectaddress=172.17.189.56
-
-# FW設定
-New-NetFirewallRule -DisplayName "WSL2 Emulator Inbound" -Direction Inbound -LocalPort 5554 -Protocol TCP -Action Allow
-New-NetFirewallRule -DisplayName "WSL2 Emulator Outbound" -Direction Outbound -LocalPort 5554 -Protocol TCP -Action Allow
-New-NetFirewallRule -DisplayName "WSL2 Emulator Inbound" -Direction Inbound -LocalPort 8081 -Protocol TCP -Action Allow
-New-NetFirewallRule -DisplayName "WSL2 Emulator Outbound" -Direction Outbound -LocalPort 8081 -Protocol TCP -Action Allow
-New-NetFirewallRule -DisplayName "WSL2 Emulator Inbound" -Direction Inbound -LocalPort 19000 -Protocol TCP -Action Allow
-New-NetFirewallRule -DisplayName "WSL2 Emulator Outbound" -Direction Outbound -LocalPort 19000 -Protocol TCP -Action Allow
-New-NetFirewallRule -DisplayName "WSL2 Emulator Inbound" -Direction Inbound -LocalPort 19001 -Protocol TCP -Action Allow
-New-NetFirewallRule -DisplayName "WSL2 Emulator Outbound" -Direction Outbound -LocalPort 19001 -Protocol TCP -Action Allow
-New-NetFirewallRule -DisplayName "WSL2 Emulator Inbound" -Direction Inbound -LocalPort 19002 -Protocol TCP -Action Allow
-New-NetFirewallRule -DisplayName "WSL2 Emulator Outbound" -Direction Outbound -LocalPort 19002 -Protocol TCP -Action Allow
-wsl --shutdown
 ```
 
-## 起動
+### 起動
 
 Windows の adb をホストサーバとして起動する。
 
@@ -58,7 +55,7 @@ adb -s emulator-5554 emu avd name
 EXPO_DEBUG=true npm run android
 ```
 
-## Appendix
+### Appendix
 
 Windows で起動しているサービスを調べて終了する。
 
@@ -66,22 +63,43 @@ Windows で起動しているサービスを調べて終了する。
 # 5037ポートを利用しているサービスを調べる
 netstat -aon | Select-String ":5037"
 Get-Process -Id <PID>
+
+# サービスを停止する
 Stop-Process -Id <PID> -Force
 ```
 
-Windows のポートフォワードと FW 設定を削除する。
+Windows のポートフォワードを設定を削除する。
 
 ```powershell
 # 結果を確認
 netsh interface portproxy show all
 # リセット
 netsh interface portproxy reset proxy
+```
 
-# emulator の削除
-adb emu kill
+Docker Compose でポートフォワードの設定をしているため、以下の設定は不要
 
+````powershell
+#FW設定の設定
+New-NetFirewallRule -DisplayName "WSL2 Emulator Inbound" -Direction Inbound -LocalPort 5554 -Protocol TCP -Action Allow
+New-NetFirewallRule -DisplayName "WSL2 Emulator Outbound" -Direction Outbound -LocalPort 5554 -Protocol TCP -Action Allow
+New-NetFirewallRule -DisplayName "WSL2 Emulator Inbound" -Direction Inbound -LocalPort 8081 -Protocol TCP -Action Allow
+New-NetFirewallRule -DisplayName "WSL2 Emulator Outbound" -Direction Outbound -LocalPort 8081 -Protocol TCP -Action Allow
+``
+Windows の FireWall 設定を削除する。
+
+```powershell
 #FW設定の確認
 Get-NetFirewallRule -DisplayName "*WSL2*" | % { $r=$_; Get-NetFirewallPortFilter -AssociatedNetFirewallRule $r | Select @{n="RuleName";e={$r.DisplayName}}, Protocol, LocalPort, @{n="Direction";e={$r.Direction}} }
 # 削除
 Remove-NetFirewallRule -DisplayName "WSL2*"
+````
+
+Windows の emulator を削除する。
+
+```powershell
+# emulatorのデバイスを確認する
+adb devices
+# emulatorを指定して削除
+adb -s emulator-5554 emu kill
 ```
